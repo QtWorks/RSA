@@ -14,6 +14,7 @@
 #include <QProgressBar>
 #include <QFileDialog>
 #include "faicons.h"
+#include "rsa.h"
 
 class MainWindow : public QMainWindow
 {

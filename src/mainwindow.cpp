@@ -17,11 +17,34 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::encrypt(){
-    //TODO
+    QString  encryptedText {};
+    rsa::Key publicKey     {this->publicE->text().toInt(),
+                            0,
+                            this->publicN->text().toInt()};
+
+    auto inputText = std::make_shared<string>(this->txtInputText->toPlainText().toStdString());
+    auto numbers   = rsa::encode(publicKey, inputText);
+
+    for (const auto & number : *numbers){
+        encryptedText += QString::number(number) + " ";
+    }
+
+    this->txtEncryptedText->setText(encryptedText);
 }
 
 void MainWindow::decrypt(){
-    //TODO
+    rsa::Key publicKey {0,
+                        this->privateD->text().toInt(),
+                        this->privateN->text().toInt()};
+    auto numbers = std::make_shared<vector<int64>>();
+
+    for (const auto &number : this->txtEncryptedText->toPlainText().split(" ")){
+        numbers->push_back(number.toLongLong());
+    }
+
+    qWarning() << numbers->size();
+
+    this->txtDecryptedText->setText(QString::fromStdString(*rsa::decode(publicKey, numbers)));
 }
 
 void MainWindow::loadFile(){

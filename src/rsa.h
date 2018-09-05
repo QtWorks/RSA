@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <sstream>
 
 using std::vector;
 using std::shared_ptr;
@@ -23,6 +24,7 @@ namespace rsa
     // function generatePairs()
     int64 modularPower(int64, int64, int64);
     shared_ptr<vector<int64>> encode(const Key, shared_ptr<string>);
+    shared_ptr<string> decode(const Key, shared_ptr<vector<int64>>);
 }
 
 #endif // RSA_H
