@@ -43,6 +43,20 @@ QLabel{
 QDialog > QLabel{
     text-align: center;
 }
+QComboBox{
+    min-width: 80px;
+    text-align: center;
+}
 QComboBox::drop-down {
     border: 0px;
+}
+QComboBox QAbstractItemView {
+    background: rgb(51,51,64);
+    color: white;
+}
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+}
+QComboBox QAbstractItemView::item::selected {
+    background: #000;
 }

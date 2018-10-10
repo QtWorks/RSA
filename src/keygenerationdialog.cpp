@@ -1,5 +1,7 @@
 #include "keygenerationdialog.h"
 
+shared_ptr<vector<int64>>KeyGenerationDialog::primes = rsa::calculateSieveOfEratosthenes(100ll);
+
 KeyGenerationDialog::KeyGenerationDialog(QWidget * parent) :
     QDialog(parent)
 {
@@ -46,9 +48,14 @@ void KeyGenerationDialog::buildButtonGroup(){
     this->gridMainWrapper->addWidget(this->buttonBox, 2, 0);
 }
 
-void fillPrimeBoxes(){
-    //TODO Here the sieve of erasthostes needs to be
-    //implemented in the rsa library.
+void KeyGenerationDialog::fillPrimeBoxes(){
+    this->chooserP->setView(new QListView);
+    this->chooserQ->setView(new QListView);
+
+    for (auto prime : *primes){
+        this->chooserP->addItem(QString("%1").arg(prime));
+        this->chooserQ->addItem(QString("%1").arg(prime));
+    }
 }
 
 void KeyGenerationDialog::addEvents(){

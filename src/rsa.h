@@ -18,7 +18,7 @@ namespace rsa
         const int64 n;
     };
 
-    vector<int64>*            calculateSieveOfEratosthenes( const int );
+    shared_ptr<vector<int64>> calculateSieveOfEratosthenes( const int64 );
     int64                     max( const int64, const int64 );
     int64                     ggt( const int64, const int64 );
     shared_ptr<vector<int64>> generatePairs(shared_ptr<vector<int64>>);

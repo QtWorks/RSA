@@ -1,8 +1,24 @@
 #include "rsa.h"
 
-vector<int64>* calculateSieveOfEratosthenes( const int64 range ) {
-    vector<int64> *primeNumbers {};
-    const int64    squareRoot   { (int64)std::floor( std::sqrt( range ) ) };
+shared_ptr<vector<int64>> rsa::calculateSieveOfEratosthenes( const int64 range ) {
+    auto         primeNumbers = std::make_shared<vector<int64>>();
+    const int64  squareRoot     {static_cast<int_fast64_t>(std::sqrt(range))};
+    vector<bool> markedNumbers  (range + 1, false);
+
+    for (int64 i = 2; i <= squareRoot; i++) {
+        if (!markedNumbers[i]) {
+            for (int64 multiplier = i * i; multiplier <= range; multiplier += i) {
+                markedNumbers[multiplier] = true;
+            }
+        }
+    }
+
+    for (int64 i = 2; i < range + 1; i++) {
+        if (!markedNumbers[i]) {
+            primeNumbers->push_back(i);
+        }
+    }
+
     return primeNumbers;
 }
 

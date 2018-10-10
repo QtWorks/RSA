@@ -6,9 +6,12 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QListView>
 #include <QHBoxLayout>
 #include <QPushButton>
+
 #include "faicons.h"
+#include "rsa.h"
 
 class KeyGenerationDialog : public QDialog
 {
@@ -34,6 +37,8 @@ private:
     QGroupBox   *buttonBox;
     QPushButton *btnAccept;
     QPushButton *btnReject;
+
+    static shared_ptr<vector<int64>> primes;
 };
 
 #endif // KEYGENERATIONDIALOG_H
