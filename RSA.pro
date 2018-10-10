@@ -45,9 +45,11 @@ DISTFILES += \
 HEADERS += \
     src/faicons.h \
     src/mainwindow.h \
-    src/rsa.h
+    src/rsa.h \
+    src/keygenerationdialog.h
 
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/rsa.cpp
+    src/rsa.cpp \
+    src/keygenerationdialog.cpp

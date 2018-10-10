@@ -1,6 +1,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+void test(){
+    auto blub = std::make_shared<vector<int64>>();
+    blub->push_back(1);
+    blub->push_back(2);
+    blub->push_back(5);
+    blub->push_back(5);
+    auto t = rsa::generatePairs(blub);
+    for (auto i : *t){
+        qWarning() << i;
+    }
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent){
     this->groupBoxMainWrapper = new QGroupBox;
@@ -11,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->buildMainContent();
     this->buildExtras();
     this->setCentralWidget(this->groupBoxMainWrapper);
+    test();
 }
 
 MainWindow::~MainWindow(){
@@ -41,8 +54,6 @@ void MainWindow::decrypt(){
     for (const auto &number : this->txtEncryptedText->toPlainText().split(" ")){
         numbers->push_back(number.toLongLong());
     }
-
-    qWarning() << numbers->size();
 
     this->txtDecryptedText->setText(QString::fromStdString(*rsa::decode(publicKey, numbers)));
 }
@@ -84,6 +95,13 @@ void MainWindow::saveFile(){
     }
 }
 
+void MainWindow::showKeyGenerationDialog(){
+    KeyGenerationDialog dialog{this};
+    this->setWindowOpacity(0.7);
+    dialog.exec();
+    this->setWindowOpacity(1);
+}
+
 QFont* MainWindow::loadFont(QString fontFileName){
     int id = QFontDatabase::addApplicationFont(fontFileName);
 
@@ -97,16 +115,20 @@ QFont* MainWindow::loadFont(QString fontFileName){
 }
 
 void MainWindow::buildKeyPanel(){
-    QGroupBox   *box           = new QGroupBox;
-    QGridLayout *gridLayout    = new QGridLayout;
-    QLabel      *labelPublicE  = new QLabel("Public E:");
-    QLabel      *labelPublicN  = new QLabel("Public N:");
-    QLabel      *labelPrivateD = new QLabel("Private D:");
-    QLabel      *labelPrivateN = new QLabel("Private N:");
-    this->publicE              = new QLineEdit("1721");
-    this->publicN              = new QLineEdit("263713");
-    this->privateD             = new QLineEdit("1373");
-    this->privateN             = new QLineEdit("263713");
+    QGroupBox   *box                = new QGroupBox;
+    QGridLayout *gridLayout         = new QGridLayout;
+    QLabel      *labelPublicE       = new QLabel("Public E:");
+    QLabel      *labelPublicN       = new QLabel("Public N:");
+    QLabel      *labelPrivateD      = new QLabel("Private D:");
+    QLabel      *labelPrivateN      = new QLabel("Private N:");
+    this->publicE                   = new QLineEdit("1721");
+    this->publicN                   = new QLineEdit("263713");
+    this->privateD                  = new QLineEdit("1373");
+    this->privateN                  = new QLineEdit("263713");
+    this->btnShowKeyGenerationPanel = new QPushButton(fa::KEY);
+
+    this->btnShowKeyGenerationPanel->setToolTip("Show key generation panel");
+    connect(this->btnShowKeyGenerationPanel, SIGNAL(clicked()), this, SLOT(showKeyGenerationDialog()));
 
     gridLayout->addWidget(labelPublicE, 0, 0);
     gridLayout->addWidget(this->publicE, 0, 1);
@@ -116,6 +138,7 @@ void MainWindow::buildKeyPanel(){
     gridLayout->addWidget(this->privateD, 1, 1);
     gridLayout->addWidget(labelPrivateN, 1, 2);
     gridLayout->addWidget(this->privateN, 1, 3);
+    gridLayout->addWidget(this->btnShowKeyGenerationPanel, 0, 4, 2, 1);
     box->setLayout(gridLayout);
     this->gridMainWrapper->addWidget(box, 0, 0);
 }
@@ -130,6 +153,10 @@ void MainWindow::buildMainContent(){
     this->btnDecrypt        = new QPushButton(fa::UNLOCK);
     this->btnLoadFile       = new QPushButton(fa::FILE_UPLOAD);
     this->btnSaveFile       = new QPushButton(fa::FILE_DOWNLOAD);
+
+    this->txtInputText->setAcceptRichText(false);
+    this->txtEncryptedText->setAcceptRichText(false);
+    this->txtDecryptedText->setAcceptRichText(false);
 
     connect(this->btnEncrypt, SIGNAL(clicked()), this, SLOT(encrypt()));
     connect(this->btnDecrypt, SIGNAL(clicked()), this, SLOT(decrypt()));

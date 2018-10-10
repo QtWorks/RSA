@@ -1,14 +1,12 @@
 <RCC>
-    <qresource prefix="/stylesheets">
-        <file>style.css</file>
-    </qresource>
-    <qresource prefix="/fonts">
-        <file>FontAwesome5.otf</file>
-        <file>RobotoCondensed-Bold.ttf</file>
-        <file>RobotoCondensed-BoldItalic.ttf</file>
-        <file>RobotoCondensed-Italic.ttf</file>
-        <file>RobotoCondensed-Light.ttf</file>
-        <file>RobotoCondensed-LightItalic.ttf</file>
-        <file>RobotoCondensed-Regular.ttf</file>
+    <qresource prefix="/">
+        <file>fonts/FontAwesome5.otf</file>
+        <file>fonts/RobotoCondensed-Bold.ttf</file>
+        <file>fonts/RobotoCondensed-BoldItalic.ttf</file>
+        <file>fonts/RobotoCondensed-Italic.ttf</file>
+        <file>fonts/RobotoCondensed-Light.ttf</file>
+        <file>fonts/RobotoCondensed-LightItalic.ttf</file>
+        <file>fonts/RobotoCondensed-Regular.ttf</file>
+        <file>stylesheets/style.css</file>
     </qresource>
 </RCC>

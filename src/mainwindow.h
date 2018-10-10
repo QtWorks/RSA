@@ -13,7 +13,9 @@
 #include <QGridLayout>
 #include <QProgressBar>
 #include <QFileDialog>
+
 #include "faicons.h"
+#include "keygenerationdialog.h"
 #include "rsa.h"
 
 class MainWindow : public QMainWindow
@@ -29,6 +31,7 @@ private slots:
     void decrypt();
     void loadFile();
     void saveFile();
+    void showKeyGenerationDialog();
 
 private:
     QFont* loadFont(QString);
@@ -43,6 +46,7 @@ private:
     QLineEdit    *publicN;
     QLineEdit    *privateD;
     QLineEdit    *privateN;
+    QPushButton  *btnShowKeyGenerationPanel;
 
     QTextEdit    *txtInputText;
     QTextEdit    *txtEncryptedText;

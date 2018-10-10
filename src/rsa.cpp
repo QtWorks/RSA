@@ -20,6 +20,20 @@ int64 rsa::ggt( const int64 first, const int64 second ) {
     return first;
 }
 
+shared_ptr<vector<int64>> rsa::generatePairs(shared_ptr<vector<int64>> input){
+    auto         output = std::make_shared<vector<int64>>();
+    const size_t END {input->size() - 1};
+
+    for (size_t i = 0; i < END; i+= 2) {
+        output->push_back(input->at(i) + input->at(i + 1));
+    }
+    if (END % 2 == 0) {
+        output->push_back(input->at(END));
+    }
+
+    return output;
+}
+
 int64 rsa::modularPower(int64 base, int64 power, int64 mod){
     int64 result {1};
     while (0 < power){
