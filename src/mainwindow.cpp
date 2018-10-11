@@ -98,7 +98,11 @@ void MainWindow::saveFile(){
 void MainWindow::showKeyGenerationDialog(){
     KeyGenerationDialog dialog{this};
     this->setWindowOpacity(0.7);
-    dialog.exec();
+
+    if (dialog.exec() == QDialog::Accepted){
+
+    }
+
     this->setWindowOpacity(1);
 }
 

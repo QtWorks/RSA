@@ -6,9 +6,13 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QLineEdit>
+#include <QDebug>
 #include <QListView>
 #include <QHBoxLayout>
 #include <QPushButton>
+
+#include <memory>
 
 #include "faicons.h"
 #include "rsa.h"
@@ -19,20 +23,34 @@ class KeyGenerationDialog : public QDialog
 public:
     KeyGenerationDialog(QWidget * parent = nullptr);
 
+private slots:
+    void recalculateKey(const QString &);
+
 private:
     void buildKeyPanel();
     void buildButtonGroup();
     void fillPrimeBoxes();
     void addEvents();
 
+    rsa::Key     resultKey;
+
     QGridLayout *gridMainWrapper;
     QLabel      *title;
 
+    //Actual user input
     QGroupBox   *contentBox;
     QLabel      *labelP;
     QLabel      *labelQ;
+    QLabel      *labelE;
     QComboBox   *chooserP;
     QComboBox   *chooserQ;
+    QComboBox   *chooserE;
+
+    //Just for visualisation
+    QLabel      *labelN;
+    QLabel      *labelD;
+    QLineEdit   *resultN;
+    QLineEdit   *resultD;
 
     QGroupBox   *buttonBox;
     QPushButton *btnAccept;

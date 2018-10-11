@@ -1,6 +1,6 @@
 #include "rsa.h"
 
-shared_ptr<vector<int64>> rsa::calculateSieveOfEratosthenes( const int64 range ) {
+shared_ptr<vector<int64>> rsa::calculateSieveOfEratosthenes(const int64 range) {
     auto         primeNumbers = std::make_shared<vector<int64>>();
     const int64  squareRoot     {static_cast<int_fast64_t>(std::sqrt(range))};
     vector<bool> markedNumbers  (range + 1, false);
@@ -22,18 +22,44 @@ shared_ptr<vector<int64>> rsa::calculateSieveOfEratosthenes( const int64 range )
     return primeNumbers;
 }
 
-int64 rsa::max( const int64 first, const int64 second ) {
+int64 rsa::max(const int64 first, const int64 second) {
     if ( first > second ) {
         return first;
     }
     return second;
 }
 
-int64 rsa::ggt( const int64 first, const int64 second ) {
+int64 rsa::ggt(const int64 first, const int64 second) {
     if ( second ) {
-        return ggt( second, first % second );
+        return ggt(second, first % second);
     }
     return first;
+}
+
+int64 rsa::extendedGcd(int64 a, int64 b){
+    int64 u       {1};
+    int64 v       {0};
+    int64 s       {0};
+    int64 t       {1};
+    int64 q       {0};
+    int64 aHelper {0};
+    int64 uHelper {0};
+    int64 vHelper {0};
+
+    while (0 < b){
+        q       = a / b;
+        aHelper = b;
+        b       = a - q * b;
+        a       = aHelper;
+        uHelper = s;
+        s       = u - q * s;
+        u       = uHelper;
+        vHelper = t;
+        t       = v - q * t;
+        v       = vHelper;
+    }
+
+    return u;
 }
 
 shared_ptr<vector<int64>> rsa::generatePairs(shared_ptr<vector<int64>> input){
