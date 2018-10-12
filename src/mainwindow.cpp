@@ -14,7 +14,8 @@ void test(){
 }
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent){
+    QMainWindow(parent), options{}
+{
     this->groupBoxMainWrapper = new QGroupBox;
     this->gridMainWrapper     = new QGridLayout;
     this->groupBoxMainWrapper->setLayout(this->gridMainWrapper);
@@ -22,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->buildKeyPanel();
     this->buildMainContent();
     this->buildExtras();
+    this->addEvents();
     this->setCentralWidget(this->groupBoxMainWrapper);
     test();
 }
@@ -100,7 +102,22 @@ void MainWindow::showKeyGenerationDialog(){
     this->setWindowOpacity(0.7);
 
     if (dialog.exec() == QDialog::Accepted){
+        shared_ptr<rsa::Key> key = dialog.getKey();
+        this->publicE->setText(QString("%1").arg(key->e));
+        this->publicN->setText(QString("%1").arg(key->n));
+        this->privateD->setText(QString("%1").arg(key->d));
+        this->privateN->setText(QString("%1").arg(key->n));
+    }
 
+    this->setWindowOpacity(1);
+}
+
+void MainWindow::showAdvancedOptionsDialog(){
+    AdvancedOptionsDialog dialog{this->options, this};
+    this->setWindowOpacity(0.7);
+
+    if (dialog.exec() == QDialog::Accepted){
+        //TODO
     }
 
     this->setWindowOpacity(1);
@@ -130,19 +147,21 @@ void MainWindow::buildKeyPanel(){
     this->privateD                  = new QLineEdit("1373");
     this->privateN                  = new QLineEdit("263713");
     this->btnShowKeyGenerationPanel = new QPushButton(fa::KEY);
+    this->btnShowMoreOptions        = new QPushButton(fa::COGS);
 
     this->btnShowKeyGenerationPanel->setToolTip("Show key generation panel");
-    connect(this->btnShowKeyGenerationPanel, SIGNAL(clicked()), this, SLOT(showKeyGenerationDialog()));
+    this->btnShowMoreOptions->setToolTip("Show advanced options");
 
-    gridLayout->addWidget(labelPublicE, 0, 0);
-    gridLayout->addWidget(this->publicE, 0, 1);
-    gridLayout->addWidget(labelPublicN, 0, 2);
-    gridLayout->addWidget(this->publicN, 0, 3);
-    gridLayout->addWidget(labelPrivateD, 1, 0);
+    gridLayout->addWidget(labelPublicE,   0, 0);
+    gridLayout->addWidget(this->publicE,  0, 1);
+    gridLayout->addWidget(labelPublicN,   0, 2);
+    gridLayout->addWidget(this->publicN,  0, 3);
+    gridLayout->addWidget(labelPrivateD,  1, 0);
     gridLayout->addWidget(this->privateD, 1, 1);
-    gridLayout->addWidget(labelPrivateN, 1, 2);
+    gridLayout->addWidget(labelPrivateN,  1, 2);
     gridLayout->addWidget(this->privateN, 1, 3);
-    gridLayout->addWidget(this->btnShowKeyGenerationPanel, 0, 4, 2, 1);
+    gridLayout->addWidget(this->btnShowKeyGenerationPanel, 0, 4);
+    gridLayout->addWidget(this->btnShowMoreOptions, 1, 4);
     box->setLayout(gridLayout);
     this->gridMainWrapper->addWidget(box, 0, 0);
 }
@@ -161,11 +180,6 @@ void MainWindow::buildMainContent(){
     this->txtInputText->setAcceptRichText(false);
     this->txtEncryptedText->setAcceptRichText(false);
     this->txtDecryptedText->setAcceptRichText(false);
-
-    connect(this->btnEncrypt, SIGNAL(clicked()), this, SLOT(encrypt()));
-    connect(this->btnDecrypt, SIGNAL(clicked()), this, SLOT(decrypt()));
-    connect(this->btnLoadFile, SIGNAL(clicked()), this, SLOT(loadFile()));
-    connect(this->btnSaveFile, SIGNAL(clicked()), this, SLOT(saveFile()));
 
     this->btnEncrypt->setToolTip("Encrypt");
     this->btnDecrypt->setToolTip("Decrypt");
@@ -194,4 +208,13 @@ void MainWindow::buildExtras(){
     hLayout->addWidget(this->progressBar);
     box->setLayout(hLayout);
     this->gridMainWrapper->addWidget(box, 2, 0);
+}
+
+void MainWindow::addEvents(){
+    connect(this->btnShowKeyGenerationPanel, SIGNAL(clicked()), this, SLOT(showKeyGenerationDialog()));
+    connect(this->btnShowMoreOptions, SIGNAL(clicked()), this, SLOT(showAdvancedOptionsDialog()));
+    connect(this->btnEncrypt, SIGNAL(clicked()), this, SLOT(encrypt()));
+    connect(this->btnDecrypt, SIGNAL(clicked()), this, SLOT(decrypt()));
+    connect(this->btnLoadFile, SIGNAL(clicked()), this, SLOT(loadFile()));
+    connect(this->btnSaveFile, SIGNAL(clicked()), this, SLOT(saveFile()));
 }

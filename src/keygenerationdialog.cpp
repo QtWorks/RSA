@@ -3,7 +3,7 @@
 shared_ptr<vector<int64>>KeyGenerationDialog::primes = rsa::calculateSieveOfEratosthenes(100ll);
 
 KeyGenerationDialog::KeyGenerationDialog(QWidget * parent) :
-    QDialog(parent), resultKey{}
+    QDialog(parent)
 {
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
     this->gridMainWrapper = new QGridLayout;
@@ -12,6 +12,13 @@ KeyGenerationDialog::KeyGenerationDialog(QWidget * parent) :
     this->fillPrimeBoxes();
     this->setLayout(this->gridMainWrapper);
     this->addEvents();
+}
+
+shared_ptr<rsa::Key> KeyGenerationDialog::getKey(){
+    if (this->resultKey == nullptr){
+        return std::make_shared<rsa::Key>();
+    }
+    return this->resultKey;
 }
 
 /*
@@ -35,9 +42,8 @@ void KeyGenerationDialog::recalculateKey(const QString & number){
 
     int64 n {p * q};
     int64 d {rsa::extendedGcd(e, validator)};
-    //TODO
-    //this->resultKey.d = d;
 
+    this->resultKey = std::make_shared<rsa::Key>(e, d, n);
     this->resultN->setText(QString("%1").arg(n));
     this->resultD->setText(QString("%1").arg(d));
 }

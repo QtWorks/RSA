@@ -22,6 +22,7 @@ class KeyGenerationDialog : public QDialog
     Q_OBJECT
 public:
     KeyGenerationDialog(QWidget * parent = nullptr);
+    shared_ptr<rsa::Key> getKey();
 
 private slots:
     void recalculateKey(const QString &);
@@ -32,7 +33,7 @@ private:
     void fillPrimeBoxes();
     void addEvents();
 
-    rsa::Key     resultKey;
+    shared_ptr<rsa::Key> resultKey;
 
     QGridLayout *gridMainWrapper;
     QLabel      *title;

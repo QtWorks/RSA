@@ -46,10 +46,12 @@ HEADERS += \
     src/faicons.h \
     src/mainwindow.h \
     src/rsa.h \
-    src/keygenerationdialog.h
+    src/keygenerationdialog.h \
+    src/advancedoptionsdialog.h
 
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/rsa.cpp \
-    src/keygenerationdialog.cpp
+    src/keygenerationdialog.cpp \
+    src/advancedoptionsdialog.cpp

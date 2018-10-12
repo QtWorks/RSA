@@ -14,6 +14,7 @@
 #include <QProgressBar>
 #include <QFileDialog>
 
+#include "advancedoptionsdialog.h"
 #include "faicons.h"
 #include "keygenerationdialog.h"
 #include "rsa.h"
@@ -32,12 +33,16 @@ private slots:
     void loadFile();
     void saveFile();
     void showKeyGenerationDialog();
+    void showAdvancedOptionsDialog();
 
 private:
     QFont* loadFont(QString);
     void buildKeyPanel();
     void buildMainContent();
     void buildExtras();
+    void addEvents();
+
+    Options       options;
 
     QGroupBox    *groupBoxMainWrapper;
     QGridLayout  *gridMainWrapper;
@@ -47,6 +52,7 @@ private:
     QLineEdit    *privateD;
     QLineEdit    *privateN;
     QPushButton  *btnShowKeyGenerationPanel;
+    QPushButton  *btnShowMoreOptions;
 
     QTextEdit    *txtInputText;
     QTextEdit    *txtEncryptedText;

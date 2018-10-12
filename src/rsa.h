@@ -16,6 +16,8 @@ namespace rsa
         const int64 e;
         const int64 d;
         const int64 n;
+        Key() : Key(0, 0, 0){}
+        Key(const int e, const int d, const int n) : e{e}, d{d}, n{n}{}
     };
 
     shared_ptr<vector<int64>> calculateSieveOfEratosthenes(const int64);
