@@ -1,7 +1,7 @@
 #include "rsa.h"
 
 shared_ptr<vector<int64>> rsa::calculateSieveOfEratosthenes(const int64 range) {
-    auto         primeNumbers = std::make_shared<vector<int64>>();
+    auto         primeNumbers = make_shared<vector<int64>>();
     const int64  squareRoot     {static_cast<int_fast64_t>(std::sqrt(range))};
     vector<bool> markedNumbers  (range + 1, false);
 
@@ -62,17 +62,60 @@ int64 rsa::extendedGcd(int64 a, int64 b){
     return u;
 }
 
+shared_ptr<vector<int64>> rsa::stringToIntVector(shared_ptr<string> text){
+    auto numbers = make_shared<vector<int64>>();
+
+    for (const auto & c : *text){
+        numbers->push_back(static_cast<int64>(c));
+    }
+
+    return numbers;
+}
+
+shared_ptr<string> rsa::intVectorToString(shared_ptr<vector<int64>> numbers){
+    stringstream output{};
+
+    for (const auto & number : *numbers){
+        output << static_cast<char>(number);
+    }
+
+    return make_shared<string>(output.str());
+}
+
+template<class T>
+void debug (shared_ptr<vector<T>> elements){
+    for (const auto & element : *elements){
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
+
 shared_ptr<vector<int64>> rsa::generatePairs(shared_ptr<vector<int64>> input){
-    auto         output = std::make_shared<vector<int64>>();
+    auto         output = make_shared<vector<int64>>();
     const size_t END {input->size() - 1};
 
     for (size_t i = 0; i < END; i+= 2) {
-        output->push_back(input->at(i) + input->at(i + 1));
+        output->push_back(input->at(i) + (input->at(i + 1) * BASIS));
     }
     if (END % 2 == 0) {
         output->push_back(input->at(END));
     }
+    debug(output);
+    return output;
+}
 
+shared_ptr<vector<int64>> rsa::splitPairs(shared_ptr<vector<int64>> numbers){
+    auto output = make_shared<vector<int64>>();
+
+    for (const int64 number : *numbers){
+        output->push_back(number % BASIS);
+        int64 second = static_cast<int64>(number / BASIS);
+        std::cout << number % BASIS << "   " << second << std::endl;
+        if (0 < second){
+            output->push_back(second);
+        }
+    }
+    debug(output);
     return output;
 }
 
@@ -91,7 +134,7 @@ int64 rsa::modularPower(int64 base, int64 power, int64 mod){
 }
 
 shared_ptr<vector<int64>> rsa::encode(const rsa::Key key, shared_ptr<string> message){
-    auto output = std::make_shared<vector<int64>>();
+    auto output = make_shared<vector<int64>>();
 
     for (const auto &current : *message){
         output->push_back(rsa::modularPower(current, key.e, key.n));
@@ -99,11 +142,20 @@ shared_ptr<vector<int64>> rsa::encode(const rsa::Key key, shared_ptr<string> mes
     return output;
 }
 
-shared_ptr<string> rsa::decode(const rsa::Key key, shared_ptr<vector<int64>> message){
-    std::stringstream stream{};
+shared_ptr<vector<int64>> rsa::encode(const rsa::Key key, shared_ptr<vector<int64>> message){
+    auto output = make_shared<vector<int64>>();
 
     for (const auto &current : *message){
-        stream << static_cast<char>(rsa::modularPower(current, key.d, key.n));
+        output->push_back(rsa::modularPower(current, key.e, key.n));
     }
-    return std::make_shared<string>(stream.str());
+    return output;
+}
+
+shared_ptr<vector<int64>> rsa::decode(const rsa::Key key, shared_ptr<vector<int64>> message){
+    auto output = make_shared<vector<int64>>();
+
+    for (const auto &current : *message){
+        output->push_back(rsa::modularPower(current, key.d, key.n));
+    }
+    return output;
 }

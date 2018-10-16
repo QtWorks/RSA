@@ -47,7 +47,8 @@ HEADERS += \
     src/mainwindow.h \
     src/rsa.h \
     src/keygenerationdialog.h \
-    src/advancedoptionsdialog.h
+    src/advancedoptionsdialog.h \
+    src/options.h
 
 SOURCES += \
     src/main.cpp \

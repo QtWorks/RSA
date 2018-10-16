@@ -38,7 +38,15 @@ void MainWindow::encrypt(){
                             this->publicN->text().toInt()};
 
     auto inputText = std::make_shared<string>(this->txtInputText->toPlainText().toStdString());
-    auto numbers   = rsa::encode(publicKey, inputText);
+    shared_ptr<vector<int64>> numbers = rsa::encode(publicKey, inputText);
+
+    if (this->options.grouping){
+        auto inputNumbers = rsa::stringToIntVector(inputText);
+        auto pairs        = rsa::generatePairs(inputNumbers);
+        numbers = rsa::encode(publicKey, pairs);
+    } else {
+        numbers = rsa::encode(publicKey, inputText);
+    }
 
     for (const auto & number : *numbers){
         encryptedText += QString::number(number) + " ";
@@ -57,7 +65,13 @@ void MainWindow::decrypt(){
         numbers->push_back(number.toLongLong());
     }
 
-    this->txtDecryptedText->setText(QString::fromStdString(*rsa::decode(publicKey, numbers)));
+    numbers = rsa::decode(publicKey, numbers);
+
+    if (this->options.grouping){
+        numbers = rsa::splitPairs(numbers);
+    }
+
+    this->txtDecryptedText->setText(QString::fromStdString(*rsa::intVectorToString(numbers)));
 }
 
 void MainWindow::loadFile(){
@@ -98,7 +112,7 @@ void MainWindow::saveFile(){
 }
 
 void MainWindow::showKeyGenerationDialog(){
-    KeyGenerationDialog dialog{this};
+    KeyGenerationDialog dialog{this->options, this};
     this->setWindowOpacity(0.7);
 
     if (dialog.exec() == QDialog::Accepted){

@@ -17,6 +17,7 @@
 #include "advancedoptionsdialog.h"
 #include "faicons.h"
 #include "keygenerationdialog.h"
+#include "options.h"
 #include "rsa.h"
 
 class MainWindow : public QMainWindow

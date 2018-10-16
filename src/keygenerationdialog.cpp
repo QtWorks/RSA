@@ -1,9 +1,19 @@
 #include "keygenerationdialog.h"
 
-shared_ptr<vector<int64>>KeyGenerationDialog::primes = rsa::calculateSieveOfEratosthenes(100ll);
+shared_ptr<vector<int64>> KeyGenerationDialog::populatePrimes(const long range){
+    static long primeRange = 100;
+    static shared_ptr<vector<int64>> primes = rsa::calculateSieveOfEratosthenes(primeRange);
 
-KeyGenerationDialog::KeyGenerationDialog(QWidget * parent) :
-    QDialog(parent)
+    if (range != primeRange){
+        primeRange = range;
+        primes     = rsa::calculateSieveOfEratosthenes(primeRange);
+    }
+
+    return primes;
+}
+
+KeyGenerationDialog::KeyGenerationDialog(Options & options, QWidget * parent) :
+    QDialog(parent), options{options}
 {
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Dialog);
     this->gridMainWrapper = new QGridLayout;
@@ -106,7 +116,7 @@ void KeyGenerationDialog::fillPrimeBoxes(){
     this->chooserP->setView(new QListView);
     this->chooserQ->setView(new QListView);
 
-    for (auto prime : *primes){
+    for (auto prime : *KeyGenerationDialog::populatePrimes(this->options.primeRange)){
         this->chooserP->addItem(QString("%1").arg(prime));
         this->chooserQ->addItem(QString("%1").arg(prime));
         this->chooserE->addItem(QString("%1").arg(prime));

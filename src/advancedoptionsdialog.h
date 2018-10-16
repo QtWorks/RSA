@@ -5,16 +5,12 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QLineEdit>
 #include <QPushButton>
+#include <QRegularExpression>
 
 #include "faicons.h"
-
-struct Options
-{
-    bool grouping;
-    Options() : Options(false){}
-    Options(const bool grouping) : grouping{grouping}{}
-};
+#include "options.h"
 
 class AdvancedOptionsDialog : public QDialog
 {
@@ -23,6 +19,7 @@ public:
     AdvancedOptionsDialog(Options &, QWidget * parent = nullptr);
 
 private slots:
+    void validate();
     void toggelingGrouping();
 
 private:
@@ -37,7 +34,9 @@ private:
 
     QGroupBox   *contentBox;
     QLabel      *labelGrouping;
+    QLabel      *labelNumberOfPrimes;
     QPushButton *toggleGrouping;
+    QLineEdit   *inputNumberOfPrimes;
 
     QGroupBox   *buttonBox;
     QPushButton *btnAccept;

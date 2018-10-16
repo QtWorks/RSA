@@ -15,13 +15,14 @@
 #include <memory>
 
 #include "faicons.h"
+#include "options.h"
 #include "rsa.h"
 
 class KeyGenerationDialog : public QDialog
 {
     Q_OBJECT
 public:
-    KeyGenerationDialog(QWidget * parent = nullptr);
+    KeyGenerationDialog(Options &, QWidget * parent = nullptr);
     shared_ptr<rsa::Key> getKey();
 
 private slots:
@@ -33,6 +34,7 @@ private:
     void fillPrimeBoxes();
     void addEvents();
 
+    Options     &options;
     shared_ptr<rsa::Key> resultKey;
 
     QGridLayout *gridMainWrapper;
@@ -57,7 +59,7 @@ private:
     QPushButton *btnAccept;
     QPushButton *btnReject;
 
-    static shared_ptr<vector<int64>> primes;
+    static shared_ptr<vector<int64>> populatePrimes(const long);
 };
 
 #endif // KEYGENERATIONDIALOG_H
